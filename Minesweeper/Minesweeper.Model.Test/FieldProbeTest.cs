@@ -20,6 +20,8 @@ namespace Com.Github.Aartjes.Minesweeper.Model.Test
         {
             var data = new TestCaseData(new[,] { { false } }, 0, 0, FieldProbeResult.Zero);
             yield return data;
+            data = new TestCaseData(new[,] { { true } }, 0, 0, SpaceState.Mine);
+            yield return data;
         }
 
         [TestCaseSource("TestProbeResultCases")]
