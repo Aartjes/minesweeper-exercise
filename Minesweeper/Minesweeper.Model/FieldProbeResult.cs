@@ -3,6 +3,7 @@
     public enum FieldProbeResult
     {
         Zero,
-        Mine
+        Mine,
+        One
     }
 }

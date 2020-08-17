@@ -8,6 +8,18 @@
             {
                 return FieldProbeResult.Mine;
             }
+            else if(x>=1 && field[x-1,y])
+            {
+                return FieldProbeResult.One;
+            }
+            else if (y >= 1 && field[x, y -1])
+            {
+                return FieldProbeResult.One;
+            }
+            else if (x >= 1 && y >= 1 && field[x -1, y - 1])
+            {
+                return FieldProbeResult.One;
+            }
             return FieldProbeResult.Zero;
         }
     }
