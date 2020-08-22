@@ -4,43 +4,44 @@
     {
         public FieldProbeResult Probe(bool[,] field, int x, int y)
         {
+            int neighborMineCount = 0;
             if (field[x, y])
             {
                 return FieldProbeResult.Mine;
             }
-            else if (SpaceExistsAndHasMine(field, x - 1, y))
+            if (SpaceExistsAndHasMine(field, x - 1, y))
             {
-                return FieldProbeResult.One;
+                neighborMineCount += 1;
             }
-            else if (SpaceExistsAndHasMine(field, x, y - 1))
+            if (SpaceExistsAndHasMine(field, x, y - 1))
             {
-                return FieldProbeResult.One;
+                neighborMineCount += 1;
             }
-            else if (SpaceExistsAndHasMine(field, x - 1, y - 1))
+            if (SpaceExistsAndHasMine(field, x - 1, y - 1))
             {
-                return FieldProbeResult.One;
+                neighborMineCount += 1;
             }
-            else if (SpaceExistsAndHasMine(field, x + 1, y))
+            if (SpaceExistsAndHasMine(field, x + 1, y))
             {
-                return FieldProbeResult.One;
+                neighborMineCount += 1;
             }
-            else if (SpaceExistsAndHasMine(field, x, y + 1))
+            if (SpaceExistsAndHasMine(field, x, y + 1))
             {
-                return FieldProbeResult.One;
+                neighborMineCount += 1;
             }
-            else if (SpaceExistsAndHasMine(field, x + 1, y + 1))
+            if (SpaceExistsAndHasMine(field, x + 1, y + 1))
             {
-                return FieldProbeResult.One;
+                neighborMineCount += 1;
             }
-            else if(SpaceExistsAndHasMine(field, x + 1, y - 1))
+            if(SpaceExistsAndHasMine(field, x + 1, y - 1))
             {
-                return FieldProbeResult.One;
+                neighborMineCount += 1;
             }
-            else if (SpaceExistsAndHasMine(field, x - 1, y + 1))
+            if (SpaceExistsAndHasMine(field, x - 1, y + 1))
             {
-                return FieldProbeResult.One;
+                neighborMineCount += 1;
             }
-            return FieldProbeResult.Zero;
+            return (FieldProbeResult)neighborMineCount;
         }
 
         private bool SpaceExistsAndHasMine(bool[,] field, int x, int y)
