@@ -4,7 +4,7 @@ namespace Com.Github.Aartjes.Minesweeper.Model
 {
     public class FieldProbe
     {
-        public FieldProbeResult Probe(bool[,] field, int x, int y)
+        public FieldProbeResult Probe(Field field, int x, int y)
         {
             int neighborMineCount = 0;
             if (field[x, y])
@@ -22,13 +22,13 @@ namespace Com.Github.Aartjes.Minesweeper.Model
             return (FieldProbeResult)neighborMineCount;
         }
 
-        private int SpaceExistsAndHasMine(bool[,] field, int x, int y)
+        private int SpaceExistsAndHasMine(Field field, int x, int y)
         {
             return Convert.ToInt32(
                 x >= 0 
-                && x<field.GetLength(0)
+                && x<field.Width
                 && y >= 0  
-                && y < field.GetLength(1) 
+                && y < field.Height 
                 && field[x, y]);
         }
     }
