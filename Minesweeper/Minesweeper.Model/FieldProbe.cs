@@ -20,12 +20,28 @@
             {
                 return FieldProbeResult.One;
             }
+            else if (SpaceExistsAndHasMine(field, x + 1, y))
+            {
+                return FieldProbeResult.One;
+            }
+            else if (SpaceExistsAndHasMine(field, x, y + 1))
+            {
+                return FieldProbeResult.One;
+            }
+            else if (SpaceExistsAndHasMine(field, x + 1, y + 1))
+            {
+                return FieldProbeResult.One;
+            }
             return FieldProbeResult.Zero;
         }
 
         private bool SpaceExistsAndHasMine(bool[,] field, int x, int y)
         {
-            return x >= 0 && y >= 0 && field[x, y];
+            return x >= 0 
+                && x<field.GetLength(0)
+                && y >= 0  
+                && y < field.GetLength(1) 
+                && field[x, y];
         }
     }
 }

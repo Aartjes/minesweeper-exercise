@@ -47,6 +47,32 @@ namespace Com.Github.Aartjes.Minesweeper.Model.Test
                 .SetName("TestProbeResult_3x3TopLeft_1_2_Returns_Zero");
             yield return new TestCaseData(field, 0, 2, FieldProbeResult.Zero)
                 .SetName("TestProbeResult_3x3TopLeft_0_2_Returns_Zero");
+
+            field = new[,]
+            {
+                { false, false, false },
+                { false, false, false },
+                { false, false, true },
+            };
+            yield return new TestCaseData(field, 0, 0, FieldProbeResult.Zero)
+                .SetName("TestProbeResult_3x3BottomRight_0_0_Returns_Zero");
+            yield return new TestCaseData(field, 1, 0, FieldProbeResult.Zero)
+                .SetName("TestProbeResult_3x3BottomRight_1_0_Returns_Zero");
+            yield return new TestCaseData(field, 0, 1, FieldProbeResult.Zero)
+                .SetName("TestProbeResult_3x3BottomRight_0_1_Returns_Zero");
+            yield return new TestCaseData(field, 1, 1, FieldProbeResult.One)
+                .SetName("TestProbeResult_3x3BottomRight_1_1_Returns_One");
+            yield return new TestCaseData(field, 2, 0, FieldProbeResult.Zero)
+                .SetName("TestProbeResult_3x3BottomRight_2_0_Returns_Zero");
+            yield return new TestCaseData(field, 2, 1, FieldProbeResult.One)
+                .SetName("TestProbeResult_3x3BottomRight_2_1_Returns_One");
+            yield return new TestCaseData(field, 2, 2, FieldProbeResult.Mine)
+                .SetName("TestProbeResult_3x3BottomRight_2_2_Returns_Mine");
+            yield return new TestCaseData(field, 1, 2, FieldProbeResult.One)
+                .SetName("TestProbeResult_3x3BottomRight_1_2_Returns_One");
+            yield return new TestCaseData(field, 0, 2, FieldProbeResult.Zero)
+                .SetName("TestProbeResult_3x3BottomRight_0_2_Returns_Zero");
+
         }
 
         [TestCaseSource("TestProbeResultCases")]
