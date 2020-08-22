@@ -117,5 +117,35 @@ namespace Com.Github.Aartjes.Minesweeper.Model.Test
             Assert.IsTrue(calledProbe);
             Assert.IsTrue(calledConverter);
         }
+
+        [Test]
+        public void SteppingAndFlaggingIsStoredPerSpace()
+        {
+            var gameState = new GameState(_field, new FieldProbe(), new SpaceStateConvertor());
+            gameState.ToggleFlag(0, 0);
+            gameState.Step(2, 0);
+            gameState.Step(2, 1);
+            gameState.Step(3, 2);
+            gameState.Step(4, 3);
+            gameState.Step(5, 4);
+            gameState.Step(6, 5);
+            gameState.Step(7, 6);
+            gameState.Step(8, 8);
+            gameState.Step(9, 9);
+            gameState.Step(9, 0);
+
+            Assert.AreEqual(GameSpaceState.Flag, gameState[0, 0]);
+            Assert.AreEqual(GameSpaceState.One, gameState[2, 0]);
+            Assert.AreEqual(GameSpaceState.Two, gameState[2, 1]);
+            Assert.AreEqual(GameSpaceState.Three, gameState[3, 2]);
+            Assert.AreEqual(GameSpaceState.Four, gameState[4, 3]);
+            Assert.AreEqual(GameSpaceState.Five, gameState[5, 4]);
+            Assert.AreEqual(GameSpaceState.Six, gameState[6, 5]);
+            Assert.AreEqual(GameSpaceState.Seven, gameState[7, 6]);
+            Assert.AreEqual(GameSpaceState.Eight, gameState[8, 8]);
+            Assert.AreEqual(GameSpaceState.Mine, gameState[9, 9]);
+            Assert.AreEqual(GameSpaceState.Zero, gameState[9, 0]);
+            Assert.AreEqual(GameSpaceState.Blank, gameState[9, 1]);
+        }
     }
 }
