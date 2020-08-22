@@ -32,6 +32,14 @@
             {
                 return FieldProbeResult.One;
             }
+            else if(SpaceExistsAndHasMine(field, x + 1, y - 1))
+            {
+                return FieldProbeResult.One;
+            }
+            else if (SpaceExistsAndHasMine(field, x - 1, y + 1))
+            {
+                return FieldProbeResult.One;
+            }
             return FieldProbeResult.Zero;
         }
 
