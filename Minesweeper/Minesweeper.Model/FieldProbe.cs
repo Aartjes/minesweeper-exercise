@@ -2,7 +2,7 @@
 
 namespace Com.Github.Aartjes.Minesweeper.Model
 {
-    public class FieldProbe
+    public class FieldProbe : IFieldProbe
     {
         public FieldProbeResult Probe(Field field, int x, int y)
         {

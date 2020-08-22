@@ -7,11 +7,15 @@ namespace Com.Github.Aartjes.Minesweeper.Model
     public class GameState
     {
         private Field _field;
+        private readonly IFieldProbe _probe;
+        private readonly ISpaceStateConvertor _spaceStateConverter;
         private GameSpaceState _state = GameSpaceState.Blank;
 
-        public GameState(Field field)
+        public GameState(Field field, IFieldProbe probe, ISpaceStateConvertor spaceStateConverter)
         {
             _field = field;
+            _probe = probe;
+            _spaceStateConverter = spaceStateConverter;
         }
 
         public GameSpaceState this[int x, int y] => _state;
@@ -34,7 +38,7 @@ namespace Com.Github.Aartjes.Minesweeper.Model
 
         public void Step(int x, int y)
         {
-            _state = GameSpaceState.Mine;
+            _state = _spaceStateConverter.Convert(_probe.Probe(_field, x, y));
         }
     }
 }

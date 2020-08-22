@@ -10,6 +10,8 @@ namespace Com.Github.Aartjes.Minesweeper.Model.Test
     public class GameStateTest
     {
         private Field _field;
+        private Mock<IFieldProbe> _probeMock;
+        private Mock<ISpaceStateConvertor> _converterMock;
 
         [SetUp]
         public void SetUp()
@@ -41,12 +43,14 @@ namespace Com.Github.Aartjes.Minesweeper.Model.Test
             fieldArray[8, 9] = true;
             fieldArray[9, 9] = true;
             _field = new Field(fieldArray);
+            _probeMock = new Mock<IFieldProbe>();
+            _converterMock = new Mock<ISpaceStateConvertor>();
         }
 
         [Test]
         public void GameStateStartsWithAllSpacesBlank()
         {
-            var gameState = new GameState(_field);
+            var gameState = new GameState(_field, _probeMock.Object, _converterMock.Object);
             Assert.AreEqual(10, gameState.FieldWidth);
             Assert.AreEqual(10, gameState.FieldHeight);
 
@@ -66,7 +70,7 @@ namespace Com.Github.Aartjes.Minesweeper.Model.Test
         [Test]
         public void ToggleFlag_TogglesFlagOnAndOff()
         {
-            var gameState = new GameState(_field);
+            var gameState = new GameState(_field, _probeMock.Object, _converterMock.Object);
             Assert.AreEqual(GameSpaceState.Blank, gameState[0, 0]);
             gameState.ToggleFlag(0, 0);
             Assert.AreEqual(GameSpaceState.Flag, gameState[0, 0]);
@@ -77,7 +81,7 @@ namespace Com.Github.Aartjes.Minesweeper.Model.Test
         [Test]
         public void Step_CantToggleFlagAfterStep()
         {
-            var gameState = new GameState(_field);
+            var gameState = new GameState(_field, new FieldProbe(), new SpaceStateConvertor());
 
             gameState.ToggleFlag(0, 0);
             Assert.AreEqual(GameSpaceState.Flag, gameState[0, 0]);
@@ -85,6 +89,33 @@ namespace Com.Github.Aartjes.Minesweeper.Model.Test
             Assert.AreEqual(GameSpaceState.Mine, gameState[0, 0]);
             gameState.ToggleFlag(0, 0);
             Assert.AreEqual(GameSpaceState.Mine, gameState[0, 0]);
+        }
+
+        [Test]
+        public void Step_CallsFieldProbeAndSpaceStateConverter()
+        {
+            bool calledProbe = false;
+            bool calledConverter = false;
+
+            _probeMock.Setup(
+                probe => probe.Probe(
+                    It.Is<Field>(field => field == _field),
+                    It.Is<int>(x => x == 0),
+                    It.Is<int>(y => y == 0)))
+                .Callback(() => calledProbe = true)
+                .Returns(FieldProbeResult.Eight);
+
+            _converterMock.Setup(
+                converter => converter.Convert(It.Is<FieldProbeResult>(state => state == FieldProbeResult.Eight)))
+                .Callback(() => calledConverter = true)
+                .Returns(GameSpaceState.Eight);
+            var gameState = new GameState(_field, _probeMock.Object, _converterMock.Object);
+
+            gameState.Step(0, 0);
+
+            Assert.AreEqual(GameSpaceState.Eight, gameState[0, 0]);
+            Assert.IsTrue(calledProbe);
+            Assert.IsTrue(calledConverter);
         }
     }
 }
