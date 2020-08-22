@@ -125,6 +125,96 @@ namespace Com.Github.Aartjes.Minesweeper.Model.Test
             yield return new TestCaseData(field, 0, 2, FieldProbeResult.Mine)
                 .SetName("TestProbeResult_3x3BottomLeft_0_2_Returns_Mine");
 
+
+            field = new[,]
+            {
+                { false, false, false },
+                { false, false, false },
+                { false, false, false },
+            };
+            yield return new TestCaseData(field, 1, 1, FieldProbeResult.Zero)
+                .SetName("TestProbeResult_3x3NoMines_1_1_Returns_Zero");
+
+            field = new[,]
+            {
+                { false, false, false },
+                { false, false, false },
+                { false, false, false },
+            };
+            yield return new TestCaseData(field, 1, 1, FieldProbeResult.Zero)
+                .SetName("TestProbeResult_3x3_0Mines_1_1_Returns_Zero");
+            field = new[,]
+            {
+                { true, false, false },
+                { false, false, false },
+                { false, false, false },
+            };
+            yield return new TestCaseData(field, 1, 1, FieldProbeResult.One)
+                .SetName("TestProbeResult_3x3_1Mine_1_1_Returns_One");
+            field = new[,]
+            {
+                { true, true, false },
+                { false, false, false },
+                { false, false, false },
+            };
+            yield return new TestCaseData(field, 1, 1, FieldProbeResult.Two)
+                .SetName("TestProbeResult_3x3_2Mines_1_1_Returns_Two");
+            field = new[,]
+            {
+                { true, true, true },
+                { false, false, false },
+                { false, false, false },
+            };
+            yield return new TestCaseData(field, 1, 1, FieldProbeResult.Three)
+                .SetName("TestProbeResult_3x3_3Mines_1_1_Returns_Three");
+            field = new[,]
+            {
+                { true, true, true },
+                { true, false, false },
+                { false, false, false },
+            };
+            yield return new TestCaseData(field, 1, 1, FieldProbeResult.Four)
+                .SetName("TestProbeResult_3x3_4Mines_1_1_Returns_Four");
+            field = new[,]
+            {
+                { true, true, true },
+                { true, false, true },
+                { false, false, false },
+            };
+            yield return new TestCaseData(field, 1, 1, FieldProbeResult.Five)
+                .SetName("TestProbeResult_3x3_5Mines_1_1_Returns_Five");
+            field = new[,]
+            {
+                { true, true, true },
+                { true, false, true },
+                { true, false, false },
+            };
+            yield return new TestCaseData(field, 1, 1, FieldProbeResult.Six)
+                .SetName("TestProbeResult_3x3_6Mines_1_1_Returns_Six");
+            field = new[,]
+            {
+                { true, true, true },
+                { true, false, true },
+                { true, true, false },
+            };
+            yield return new TestCaseData(field, 1, 1, FieldProbeResult.Seven)
+                .SetName("TestProbeResult_3x3_7Mines_1_1_Returns_Seven");
+            field = new[,]
+            {
+                { true, true, true },
+                { true, false, true },
+                { true, true, true },
+            };
+            yield return new TestCaseData(field, 1, 1, FieldProbeResult.Eight)
+                .SetName("TestProbeResult_3x3_8Mines_1_1_Returns_Eight");
+            field = new[,]
+            {
+                { true, true, true },
+                { true, true, true },
+                { true, true, true },
+            };
+            yield return new TestCaseData(field, 1, 1, FieldProbeResult.Mine)
+                .SetName("TestProbeResult_3x3_9Mines_1_1_Returns_Mine");
         }
 
         [TestCaseSource("TestProbeResultCases")]
