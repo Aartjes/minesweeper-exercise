@@ -21,14 +21,20 @@ namespace Com.Github.Aartjes.Minesweeper.Model
 
         public void ToggleFlag(int x, int y)
         {
-            if (_state != GameSpaceState.Flag)
+            switch(_state)
             {
-                _state = GameSpaceState.Flag;
+                case GameSpaceState.Blank:
+                    _state = GameSpaceState.Flag;
+                    break;
+                case GameSpaceState.Flag:
+                    _state = GameSpaceState.Blank;
+                    break;
             }
-            else
-            {
-                _state = GameSpaceState.Blank;
-            }
+        }
+
+        public void Step(int x, int y)
+        {
+            _state = GameSpaceState.Mine;
         }
     }
 }
