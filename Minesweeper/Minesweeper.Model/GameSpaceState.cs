@@ -16,6 +16,7 @@ namespace Com.Github.Aartjes.Minesweeper.Model
         Six = 6,
         Seven = 7,
         Eight = 8,
-        Blank = 9
+        Blank = 9,
+        Flag = 10
     }
 }
