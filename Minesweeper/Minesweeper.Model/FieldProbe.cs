@@ -1,4 +1,6 @@
-﻿namespace Com.Github.Aartjes.Minesweeper.Model
+﻿using System;
+
+namespace Com.Github.Aartjes.Minesweeper.Model
 {
     public class FieldProbe
     {
@@ -9,48 +11,25 @@
             {
                 return FieldProbeResult.Mine;
             }
-            if (SpaceExistsAndHasMine(field, x - 1, y))
-            {
-                neighborMineCount += 1;
-            }
-            if (SpaceExistsAndHasMine(field, x, y - 1))
-            {
-                neighborMineCount += 1;
-            }
-            if (SpaceExistsAndHasMine(field, x - 1, y - 1))
-            {
-                neighborMineCount += 1;
-            }
-            if (SpaceExistsAndHasMine(field, x + 1, y))
-            {
-                neighborMineCount += 1;
-            }
-            if (SpaceExistsAndHasMine(field, x, y + 1))
-            {
-                neighborMineCount += 1;
-            }
-            if (SpaceExistsAndHasMine(field, x + 1, y + 1))
-            {
-                neighborMineCount += 1;
-            }
-            if(SpaceExistsAndHasMine(field, x + 1, y - 1))
-            {
-                neighborMineCount += 1;
-            }
-            if (SpaceExistsAndHasMine(field, x - 1, y + 1))
-            {
-                neighborMineCount += 1;
-            }
+            neighborMineCount += SpaceExistsAndHasMine(field, x - 1, y);
+            neighborMineCount += SpaceExistsAndHasMine(field, x, y - 1);
+            neighborMineCount += SpaceExistsAndHasMine(field, x - 1, y - 1);
+            neighborMineCount += SpaceExistsAndHasMine(field, x + 1, y);
+            neighborMineCount += SpaceExistsAndHasMine(field, x, y + 1);
+            neighborMineCount += SpaceExistsAndHasMine(field, x + 1, y + 1);
+            neighborMineCount += SpaceExistsAndHasMine(field, x + 1, y - 1);
+            neighborMineCount += SpaceExistsAndHasMine(field, x - 1, y + 1);
             return (FieldProbeResult)neighborMineCount;
         }
 
-        private bool SpaceExistsAndHasMine(bool[,] field, int x, int y)
+        private int SpaceExistsAndHasMine(bool[,] field, int x, int y)
         {
-            return x >= 0 
+            return Convert.ToInt32(
+                x >= 0 
                 && x<field.GetLength(0)
                 && y >= 0  
                 && y < field.GetLength(1) 
-                && field[x, y];
+                && field[x, y]);
         }
     }
 }
