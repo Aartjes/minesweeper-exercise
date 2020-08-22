@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Com.Github.Aartjes.Minesweeper.Model
 {
-    public class GameState
+    public class GameState : IGameState
     {
         private Field _field;
         private readonly IFieldProbe _probe;
