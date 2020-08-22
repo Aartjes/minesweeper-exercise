@@ -62,5 +62,16 @@ namespace Com.Github.Aartjes.Minesweeper.Model.Test
             }
             Assert.Pass();
         }
+
+        [Test]
+        public void ToggleFlag_TogglesFlagOnAndOff()
+        {
+            var gameState = new GameState(_field);
+            Assert.AreEqual(GameSpaceState.Blank, gameState[0, 0]);
+            gameState.ToggleFlag(0, 0);
+            Assert.AreEqual(GameSpaceState.Flag, gameState[0, 0]);
+            gameState.ToggleFlag(0, 0);
+            Assert.AreEqual(GameSpaceState.Blank, gameState[0, 0]);
+        }
     }
 }
