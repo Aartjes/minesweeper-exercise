@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Com.Github.Aartjes.Minesweeper.Model
 {
-    public class StepCommand
+    public class StepCommand : IGameCommand
     {
         private int _x;
         private int _y;

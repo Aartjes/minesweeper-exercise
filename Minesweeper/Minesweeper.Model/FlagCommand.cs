@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Com.Github.Aartjes.Minesweeper.Model
 {
-    public class FlagCommand
+    public class FlagCommand : IGameCommand
     {
         private readonly int _x;
         private readonly int _y;

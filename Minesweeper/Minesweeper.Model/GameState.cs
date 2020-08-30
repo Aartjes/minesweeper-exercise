@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Com.Github.Aartjes.Minesweeper.Model
@@ -31,6 +33,8 @@ namespace Com.Github.Aartjes.Minesweeper.Model
         public int FieldWidth => _field.Width;
         public int FieldHeight => _field.Height;
 
+        public int MineCount => _field.MineCount;
+
         public void ToggleFlag(int x, int y)
         {
             switch (_state[x, y])
@@ -47,6 +51,18 @@ namespace Com.Github.Aartjes.Minesweeper.Model
         public void Step(int x, int y)
         {
             _state[x, y] = _spaceStateConverter.Convert(_probe.Probe(_field, x, y));
+        }
+
+        public IEnumerator<GameSpaceState> GetEnumerator()
+        {
+            return _state
+                .Cast<GameSpaceState>()
+                .GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return _state.GetEnumerator();
         }
     }
 }
