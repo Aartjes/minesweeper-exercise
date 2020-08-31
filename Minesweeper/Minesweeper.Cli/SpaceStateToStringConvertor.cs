@@ -3,7 +3,7 @@ using System;
 
 namespace Com.Github.Aartjes.Minesweeper.Cli
 {
-    public class SpaceStateToStringConvertor
+    public class SpaceStateToStringConvertor : ISpaceStateToStringConvertor
     {
         public string Convert(GameSpaceState input)
         {
