@@ -3,5 +3,7 @@
     public interface IGameCommand
     {
         void Execute(IGameState state);
+        int X { get; }
+        int Y { get; }
     }
 }

@@ -6,18 +6,18 @@ namespace Com.Github.Aartjes.Minesweeper.Model
 {
     public class FlagCommand : IGameCommand
     {
-        private readonly int _x;
-        private readonly int _y;
+        public int X { get; }
+        public int Y { get; }
 
         public FlagCommand(int x, int y)
         {
-            _x = x;
-            _y = y;
+            X = x;
+            Y = y;
         }
 
         public void Execute(IGameState gameState)
         {
-            gameState.ToggleFlag(_x, _y);
+            gameState.ToggleFlag(X, Y);
         }
     }
 }

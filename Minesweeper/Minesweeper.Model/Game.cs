@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Com.Github.Aartjes.Minesweeper.Model
 {
-    public class Game
+    public class Game : IGame
     {
         private IGameState _state;
 
@@ -21,9 +21,9 @@ namespace Com.Github.Aartjes.Minesweeper.Model
             {
                 return GameStatus.Loss;
             }
-            else if(_state.Count(spaceState => 
-                    spaceState == GameSpaceState.Blank 
-                    || spaceState == GameSpaceState.Flag)
+            else if (_state.Count(spaceState =>
+                     spaceState == GameSpaceState.Blank
+                     || spaceState == GameSpaceState.Flag)
                 == _state.MineCount)
             {
                 return GameStatus.Win;

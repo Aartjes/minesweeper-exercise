@@ -6,18 +6,18 @@ namespace Com.Github.Aartjes.Minesweeper.Model
 {
     public class StepCommand : IGameCommand
     {
-        private int _x;
-        private int _y;
+        public int X { get; }
+        public int Y { get; }
 
         public StepCommand(int x, int y)
         {
-            _x = x;
-            _y = y;
+            X = x;
+            Y = y;
         }
 
         public void Execute(IGameState gameState)
         {
-            Step(_x, _y, gameState);
+            Step(X, Y, gameState);
         }
 
         private void Step(int x, int y, IGameState gameState)
