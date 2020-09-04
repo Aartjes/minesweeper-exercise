@@ -17,11 +17,11 @@ namespace Com.Gitlab.Aartjes.Minesweeper.Cli.Test
             _interpreter = new CommandInterpreter(_programMock.Object);
         }
 
-        [TestCase("step 0 0", 0, 0)]
-        [TestCase("stEP 0,0", 0, 0)]
-        [TestCase("   stEP   0,   \t      0", 0, 0)]
-        [TestCase("step 11 11", 11, 11)]
-        [TestCase("step 22 41", 22, 41)]
+        [TestCase("step 1 1", 0, 0)]
+        [TestCase("stEP 1,1", 0, 0)]
+        [TestCase("   stEP   1,   \t      1", 0, 0)]
+        [TestCase("step 12 12", 11, 11)]
+        [TestCase("step 23 42", 22, 41)]
         public void TestStepCommand(string command, int x, int y)
         {
             IGameCommand executedCommand = null;
@@ -38,11 +38,11 @@ namespace Com.Gitlab.Aartjes.Minesweeper.Cli.Test
             Assert.AreEqual(y, stepCommand.Y);
         }
 
-        [TestCase("flag 0 0", 0, 0)]
-        [TestCase("FlAg 0,0", 0, 0)]
-        [TestCase("   FlaG   0,   \t      0", 0, 0)]
-        [TestCase("flag 11 11", 11, 11)]
-        [TestCase("flag 22 41", 22, 41)]
+        [TestCase("flag 1 1", 0, 0)]
+        [TestCase("FlAg 1,1", 0, 0)]
+        [TestCase("   FlaG   1,   \t      1", 0, 0)]
+        [TestCase("flag 12 12", 11, 11)]
+        [TestCase("flag 23 42", 22, 41)]
         public void TestFlagCommand(string command, int x, int y)
         {
             IGameCommand executedCommand = null;
