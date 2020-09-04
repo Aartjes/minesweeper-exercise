@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Com.Github.Aartjes.Minesweeper.Cli
 {
-    public class GameStatePrinter
+    public class GameStatePrinter : IGameStatePrinter
     {
         private ISpaceStateToStringConvertor _convertor;
 

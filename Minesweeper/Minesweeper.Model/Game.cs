@@ -7,24 +7,24 @@ namespace Com.Github.Aartjes.Minesweeper.Model
 {
     public class Game : IGame
     {
-        private IGameState _state;
-
         public Game(IGameState state)
         {
-            _state = state;
+            State = state;
         }
+
+        public IGameState State { get; }
 
         public GameStatus ExecuteCommand(IGameCommand command)
         {
-            command.Execute(_state);
-            if (_state.Any(spaceState => spaceState == GameSpaceState.Mine))
+            command.Execute(State);
+            if (State.Any(spaceState => spaceState == GameSpaceState.Mine))
             {
                 return GameStatus.Loss;
             }
-            else if (_state.Count(spaceState =>
+            else if (State.Count(spaceState =>
                      spaceState == GameSpaceState.Blank
                      || spaceState == GameSpaceState.Flag)
-                == _state.MineCount)
+                == State.MineCount)
             {
                 return GameStatus.Win;
             }

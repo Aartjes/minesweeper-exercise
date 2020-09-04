@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Com.Github.Aartjes.Minesweeper.Cli
 {
-    public class CommandInterpreter
+    public class CommandInterpreter : ICommandInterpreter
     {
         private IProgram _program;
 
@@ -18,7 +18,7 @@ namespace Com.Github.Aartjes.Minesweeper.Cli
         public void Interpret(string command)
         {
             var parts = command.Split(" \t,".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
-            if (string.Equals("step",parts[0],StringComparison.CurrentCultureIgnoreCase))
+            if (string.Equals("step", parts[0], StringComparison.CurrentCultureIgnoreCase))
             {
                 CreateAndExecuteGameCommand((x, y) => new StepCommand(x, y), parts[1], parts[2]);
             }
