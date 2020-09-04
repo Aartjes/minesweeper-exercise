@@ -20,10 +20,19 @@ namespace Com.Github.Aartjes.Minesweeper.Cli
             var parts = command.Split(" \t,".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
             if (string.Equals("step",parts[0],StringComparison.CurrentCultureIgnoreCase))
             {
-                _program.Game.ExecuteCommand(
+                var state = _program.Game.ExecuteCommand(
                     new StepCommand(
                         int.Parse(parts[1], CultureInfo.CurrentCulture) -1,
                         int.Parse(parts[2], CultureInfo.CurrentCulture) -1));
+                switch (state)
+                {
+                    case GameStatus.Loss:
+                        _program.Lose();
+                        break;
+                    case GameStatus.Win:
+                        _program.Win();
+                        break;
+                }
             }
             else if (string.Equals("flag", parts[0], StringComparison.CurrentCultureIgnoreCase))
             {

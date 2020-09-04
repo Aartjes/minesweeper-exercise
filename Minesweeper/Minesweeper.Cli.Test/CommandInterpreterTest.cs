@@ -73,5 +73,32 @@ namespace Com.Gitlab.Aartjes.Minesweeper.Cli.Test
 
             Assert.AreEqual(1, amountOfTimesExitHasBeenCalled);
         }
+
+        [TestCase(GameStatus.Win, 0, 1)]
+        [TestCase(GameStatus.Loss, 1, 0)]
+        public void TestWinLoss_CallsProgramWinLose(GameStatus status, int expectedLoseCalls, int expectedWinCalls)
+        {
+            int amountOfTimesLoseIsCalled = 0;
+            _programMock.Setup(program => program.Lose())
+                .Callback(() => amountOfTimesLoseIsCalled += 1);
+
+            int amountOfTimesWinIsCalled = 0;
+            _programMock.Setup(program => program.Win())
+                .Callback(() => amountOfTimesWinIsCalled += 1);
+
+            var gameMock = new Mock<IGame>();
+            gameMock.Setup(game => game.ExecuteCommand(It.IsAny<IGameCommand>()))
+                .Returns(status);
+
+            _programMock.Setup(program => program.Game)
+                .Returns(gameMock.Object);
+
+            var command = "step 1, 1";
+
+            _interpreter.Interpret(command);
+
+            Assert.AreEqual(expectedLoseCalls, amountOfTimesLoseIsCalled);
+            Assert.AreEqual(expectedWinCalls, amountOfTimesWinIsCalled);
+        }
     }
 }

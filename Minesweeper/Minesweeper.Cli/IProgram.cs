@@ -10,5 +10,7 @@ namespace Com.Github.Aartjes.Minesweeper.Cli
         IGame Game { get; }
 
         void Exit();
+        void Lose();
+        void Win();
     }
 }
