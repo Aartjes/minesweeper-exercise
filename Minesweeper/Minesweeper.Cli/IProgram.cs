@@ -12,5 +12,6 @@ namespace Com.Github.Aartjes.Minesweeper.Cli
         void Exit();
         void Lose();
         void Win();
+        void NewGame();
     }
 }

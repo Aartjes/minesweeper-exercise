@@ -2,6 +2,7 @@
 using Com.Github.Aartjes.Minesweeper.Model;
 using Moq;
 using NUnit.Framework;
+using System.Reflection.PortableExecutable;
 
 namespace Com.Gitlab.Aartjes.Minesweeper.Cli.Test
 {
@@ -99,6 +100,25 @@ namespace Com.Gitlab.Aartjes.Minesweeper.Cli.Test
 
             Assert.AreEqual(expectedLoseCalls, amountOfTimesLoseIsCalled);
             Assert.AreEqual(expectedWinCalls, amountOfTimesWinIsCalled);
+        }
+
+        [TestCase("Yes", 1, 0)]
+        [TestCase("No", 0, 1)]
+        [TestCase("  YeS  ,", 1, 0)]
+        [TestCase(" , nO ,", 0, 1)]
+        public void InterpretNewGameYesNo_YesCallsProgramNewGame(string command, int expectedNewGameCallCounts, int expectedExitCounts)
+        {
+            int newGameCallCount = 0;
+            _programMock.Setup(program => program.NewGame())
+                .Callback(() => newGameCallCount += 1);
+            int exitCounts = 0;
+            _programMock.Setup(program => program.Exit())
+                .Callback(() => exitCounts += 1);
+
+            _interpreter.InterpretNewGameYesNo(command, _programMock.Object);
+
+            Assert.AreEqual(expectedNewGameCallCounts, newGameCallCount);
+            Assert.AreEqual(expectedExitCounts, exitCounts);
         }
     }
 }

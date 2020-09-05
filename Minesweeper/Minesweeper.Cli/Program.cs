@@ -20,7 +20,7 @@ namespace Com.Github.Aartjes.Minesweeper.Cli
             Game = _gameFactory.Create();
         }
 
-        public IGame Game { get; }
+        public IGame Game { get; private set; }
 
         static void Main(string[] args)
         {
@@ -34,21 +34,38 @@ namespace Com.Github.Aartjes.Minesweeper.Cli
 
         public void Lose()
         {
-            throw new NotImplementedException();
+            HandleGameEnd(_communicator.CommunicateLoss);
         }
 
         public void Win()
         {
-            throw new NotImplementedException();
+            HandleGameEnd(_communicator.CommunicateWin);
+        }
+
+        private void HandleGameEnd(Action communicateGameEnd)
+        {
+            CommunicateState();
+            communicateGameEnd();
+            _interpreter.InterpretNewGameYesNo(_communicator.AskForNewGame(), this);
         }
 
         public void Execute()
         {
             while (!_exited)
             {
-                _communicator.DisplayState(_gameStatePrinter.Print(Game.State));
+                CommunicateState();
                 _interpreter.Interpret(_communicator.AskForCommand(), this);
             }
+        }
+
+        private void CommunicateState()
+        {
+            _communicator.DisplayState(_gameStatePrinter.Print(Game.State));
+        }
+
+        public void NewGame()
+        {
+            Game = _gameFactory.Create();
         }
     }
 }

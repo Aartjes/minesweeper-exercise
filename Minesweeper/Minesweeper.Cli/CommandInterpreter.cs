@@ -14,7 +14,7 @@ namespace Com.Github.Aartjes.Minesweeper.Cli
 
         public void Interpret(string command, IProgram program)
         {
-            var parts = command.Split(" \t,".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            var parts = ProcessCommand(command);
             if (string.Equals("step", parts[0], StringComparison.CurrentCultureIgnoreCase))
             {
                 CreateAndExecuteGameCommand((x, y) => new StepCommand(x, y), parts[1], parts[2], program);
@@ -27,6 +27,11 @@ namespace Com.Github.Aartjes.Minesweeper.Cli
             {
                 program.Exit();
             }
+        }
+
+        private string[] ProcessCommand(string command)
+        {
+            return command.Split(" \t,".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
         }
 
         private void CreateAndExecuteGameCommand(Func<int, int, IGameCommand> createCommand, string xString, string yString, IProgram program)
@@ -52,6 +57,18 @@ namespace Com.Github.Aartjes.Minesweeper.Cli
         private int ToCoordinate(string coordinateString)
         {
             return int.Parse(coordinateString, CultureInfo.CurrentCulture) - 1;
+        }
+
+        public void InterpretNewGameYesNo(string command, IProgram program)
+        {
+            if (string.Equals(ProcessCommand(command)[0], "Yes", StringComparison.OrdinalIgnoreCase))
+            {
+                program.NewGame();
+            }
+            else
+            {
+                program.Exit();
+            }
         }
     }
 }

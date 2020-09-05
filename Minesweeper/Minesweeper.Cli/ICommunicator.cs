@@ -8,5 +8,8 @@ namespace Com.Github.Aartjes.Minesweeper.Cli
     {
         string AskForCommand();
         void DisplayState(string state);
+        void CommunicateWin();
+        void CommunicateLoss();
+        string AskForNewGame();
     }
 }

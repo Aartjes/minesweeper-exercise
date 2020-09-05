@@ -103,5 +103,83 @@ namespace Com.Gitlab.Aartjes.Minesweeper.Cli.Test
 
             Assert.AreEqual(statePrintResult, displayedState);
         }
+
+        [Test]
+        public void Win_CommunicatesWin()
+        {
+            _gameMock.Setup(game => game.ExecuteCommand(It.IsAny<IGameCommand>()))
+                .Returns(GameStatus.Win);
+
+            var commandQueue = new Queue<string>(new[] { "Step 1,1", "exit" });
+            _communicatorMock.Setup(communicator => communicator.AskForCommand())
+                .Returns(() => commandQueue.Dequeue());
+
+            _communicatorMock.Setup(communicator => communicator.AskForNewGame())
+                .Returns("No");
+
+            int communicateWinCalls = 0;
+            _communicatorMock.Setup(communicator => communicator.CommunicateWin())
+                .Callback(() => communicateWinCalls += 1);
+
+            var program = new Program(_communicatorMock.Object, _gameFactoryMock.Object, _gameStatePrinterMock.Object, new CommandInterpreter());
+            program.Execute();
+
+            Assert.AreEqual(1, communicateWinCalls);
+        }
+
+        [Test]
+        public void Loss_CommunicatesLoss()
+        {
+            _gameMock.Setup(game => game.ExecuteCommand(It.IsAny<IGameCommand>()))
+                .Returns(GameStatus.Loss);
+
+            var commandQueue = new Queue<string>(new[] { "Step 1,1", "exit" });
+            _communicatorMock.Setup(communicator => communicator.AskForCommand())
+                .Returns(() => commandQueue.Dequeue());
+
+            _communicatorMock.Setup(communicator => communicator.AskForNewGame())
+                .Returns("No");
+
+            int communicateLossCalls = 0;
+            _communicatorMock.Setup(communicator => communicator.CommunicateLoss())
+                .Callback(() => communicateLossCalls += 1);
+
+            var program = new Program(_communicatorMock.Object, _gameFactoryMock.Object, _gameStatePrinterMock.Object, new CommandInterpreter());
+            program.Execute();
+
+            Assert.AreEqual(1, communicateLossCalls);
+        }
+
+        [TestCase(GameStatus.Loss, 2, 1, "No", "Step 1,1")]
+        [TestCase(GameStatus.Win, 2, 1, "No", "Step 1,1")]
+        [TestCase(GameStatus.Loss, 3, 2, "Yes", "Step 1,1", "Exit")]
+        [TestCase(GameStatus.Win, 3, 2, "Yes", "Step 1,1", "Exit")]
+        public void WinOrLoss_ShowsStateAndAskForAnotherGame_ClosesAfterNo(GameStatus statusAfterGameCommand, int expectedStateDisplayCounter, int expectedGameCreationCounter, string startNewGame, params string[] commands)
+        {
+            _gameMock.Setup(game => game.ExecuteCommand(It.IsAny<IGameCommand>()))
+                .Returns(statusAfterGameCommand);
+
+            var commandQueue = new Queue<string>(commands);
+            _communicatorMock.Setup(communicator => communicator.AskForCommand())
+                .Returns(() => commandQueue.Dequeue());
+
+            _communicatorMock.Setup(communicator => communicator.AskForNewGame())
+                .Returns(startNewGame);
+
+            int stateDisplayCounter = 0;
+            _communicatorMock.Setup(communicator => communicator.DisplayState(It.IsAny<string>()))
+                .Callback(() => stateDisplayCounter += 1);
+
+            int gameCreationCounter = 0;
+            _gameFactoryMock.Setup(factory => factory.Create())
+                .Callback(() => gameCreationCounter += 1)
+                .Returns(_gameMock.Object);
+
+            var program = new Program(_communicatorMock.Object, _gameFactoryMock.Object, _gameStatePrinterMock.Object, new CommandInterpreter());
+            program.Execute();
+
+            Assert.AreEqual(expectedStateDisplayCounter, stateDisplayCounter);
+            Assert.AreEqual(expectedGameCreationCounter, gameCreationCounter);
+        }
     }
 }
