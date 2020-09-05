@@ -15,7 +15,6 @@ namespace Com.Gitlab.Aartjes.Minesweeper.Cli.Test
         private Mock<IGameFactory> _gameFactoryMock;
         private Mock<ICommunicator> _communicatorMock;
         private Mock<IGameStatePrinter> _gameStatePrinterMock;
-        private Program _program;
 
         [SetUp]
         public void SetUp()
@@ -28,16 +27,16 @@ namespace Com.Gitlab.Aartjes.Minesweeper.Cli.Test
                 .Returns(_gameMock.Object);
             _communicatorMock = new Mock<ICommunicator>();
             _gameStatePrinterMock = new Mock<IGameStatePrinter>();
-            _program = new Program(_communicatorMock.Object, _gameFactoryMock.Object, _gameStatePrinterMock.Object);
         }
 
         [Test]
         public void ExecutionStopsAfterCallingExit()
         {
             var interpreterMock = new Mock<ICommandInterpreter>();
-            interpreterMock.Setup(mock => mock.Interpret(It.IsAny<string>()))
-                .Callback(() => _program.Exit());
-            _program.Execute(interpreterMock.Object);
+            var program = new Program(_communicatorMock.Object, _gameFactoryMock.Object, _gameStatePrinterMock.Object, interpreterMock.Object);
+            interpreterMock.Setup(mock => mock.Interpret(It.IsAny<string>(), It.IsAny<IProgram>()))
+                .Callback(() => program.Exit());
+            program.Execute();
 
             //if the program has stopped it reaches here, otherwise it;s still in a loop.
             Assert.Pass();
@@ -53,7 +52,8 @@ namespace Com.Gitlab.Aartjes.Minesweeper.Cli.Test
                 .Returns(() => commands[commandsInterpreted])
                 .Callback(() => commandsInterpreted += 1);
 
-            _program.Execute(new CommandInterpreter(_program));
+            var program = new Program(_communicatorMock.Object, _gameFactoryMock.Object, _gameStatePrinterMock.Object, new CommandInterpreter());
+            program.Execute();
 
             Assert.AreEqual(commands.Length, commandsInterpreted);
         }
@@ -71,8 +71,10 @@ namespace Com.Gitlab.Aartjes.Minesweeper.Cli.Test
             int stateDisplayCount = 0;
             _communicatorMock.Setup(communicator => communicator.DisplayState(It.IsAny<string>()))
                 .Callback(() => stateDisplayCount += 1);
+            
+            var program = new Program(_communicatorMock.Object, _gameFactoryMock.Object, _gameStatePrinterMock.Object, new CommandInterpreter());
 
-            _program.Execute(new CommandInterpreter(_program));
+            program.Execute();
 
             Assert.AreEqual(commands.Length, stateDisplayCount);
         }
@@ -95,7 +97,9 @@ namespace Com.Gitlab.Aartjes.Minesweeper.Cli.Test
             _communicatorMock.Setup(communicator => communicator.DisplayState(It.IsAny<string>()))
                 .Callback((string message) => displayedState = message);
 
-            _program.Execute(new CommandInterpreter(_program));
+            var program = new Program(_communicatorMock.Object, _gameFactoryMock.Object, _gameStatePrinterMock.Object, new CommandInterpreter());
+
+            program.Execute();
 
             Assert.AreEqual(statePrintResult, displayedState);
         }

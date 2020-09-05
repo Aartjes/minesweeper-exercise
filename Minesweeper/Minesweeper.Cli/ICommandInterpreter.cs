@@ -2,6 +2,6 @@
 {
     public interface ICommandInterpreter
     {
-        void Interpret(string command);
+        void Interpret(string command, IProgram program);
     }
 }

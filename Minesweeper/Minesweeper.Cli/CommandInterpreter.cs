@@ -8,43 +8,40 @@ namespace Com.Github.Aartjes.Minesweeper.Cli
 {
     public class CommandInterpreter : ICommandInterpreter
     {
-        private IProgram _program;
-
-        public CommandInterpreter(IProgram @object)
+        public CommandInterpreter()
         {
-            _program = @object;
         }
 
-        public void Interpret(string command)
+        public void Interpret(string command, IProgram program)
         {
             var parts = command.Split(" \t,".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
             if (string.Equals("step", parts[0], StringComparison.CurrentCultureIgnoreCase))
             {
-                CreateAndExecuteGameCommand((x, y) => new StepCommand(x, y), parts[1], parts[2]);
+                CreateAndExecuteGameCommand((x, y) => new StepCommand(x, y), parts[1], parts[2], program);
             }
             else if (string.Equals("flag", parts[0], StringComparison.CurrentCultureIgnoreCase))
             {
-                CreateAndExecuteGameCommand((x, y) => new FlagCommand(x, y), parts[1], parts[2]);
+                CreateAndExecuteGameCommand((x, y) => new FlagCommand(x, y), parts[1], parts[2], program);
             }
             else if (string.Equals("exit", parts[0], StringComparison.CurrentCultureIgnoreCase))
             {
-                _program.Exit();
+                program.Exit();
             }
         }
 
-        private void CreateAndExecuteGameCommand(Func<int, int, IGameCommand> createCommand, string xString, string yString)
+        private void CreateAndExecuteGameCommand(Func<int, int, IGameCommand> createCommand, string xString, string yString, IProgram program)
         {
             var command = createCommand(
                 ToCoordinate(xString),
                 ToCoordinate(yString));
-            var state = _program.Game.ExecuteCommand(command);
+            var state = program.Game.ExecuteCommand(command);
             switch (state)
             {
                 case GameStatus.Loss:
-                    _program.Lose();
+                    program.Lose();
                     break;
                 case GameStatus.Win:
-                    _program.Win();
+                    program.Win();
                     break;
                 case GameStatus.Ongoing:
                 default:

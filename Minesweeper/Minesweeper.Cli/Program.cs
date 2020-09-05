@@ -9,12 +9,14 @@ namespace Com.Github.Aartjes.Minesweeper.Cli
         private readonly IGameFactory _gameFactory;
         private readonly IGameStatePrinter _gameStatePrinter;
         private bool _exited;
+        ICommandInterpreter _interpreter;
 
-        public Program(ICommunicator communicator, IGameFactory gameFactory, IGameStatePrinter gameStatePrinter)
+        public Program(ICommunicator communicator, IGameFactory gameFactory, IGameStatePrinter gameStatePrinter, ICommandInterpreter interpreter)
         {
             _communicator = communicator;
             _gameFactory = gameFactory;
             _gameStatePrinter = gameStatePrinter;
+            _interpreter = interpreter;
             Game = _gameFactory.Create();
         }
 
@@ -40,12 +42,12 @@ namespace Com.Github.Aartjes.Minesweeper.Cli
             throw new NotImplementedException();
         }
 
-        public void Execute(ICommandInterpreter interpreter)
+        public void Execute()
         {
             while (!_exited)
             {
                 _communicator.DisplayState(_gameStatePrinter.Print(Game.State));
-                interpreter.Interpret(_communicator.AskForCommand());
+                _interpreter.Interpret(_communicator.AskForCommand(), this);
             }
         }
     }

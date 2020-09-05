@@ -14,7 +14,7 @@ namespace Com.Gitlab.Aartjes.Minesweeper.Cli.Test
         public void Setup()
         {
             _programMock = new Mock<IProgram>();
-            _interpreter = new CommandInterpreter(_programMock.Object);
+            _interpreter = new CommandInterpreter();
         }
 
         [TestCase("step 1 1", 0, 0)]
@@ -31,7 +31,7 @@ namespace Com.Gitlab.Aartjes.Minesweeper.Cli.Test
             _programMock.Setup(program => program.Game)
                 .Returns(gameMock.Object);
             
-            _interpreter.Interpret(command);
+            _interpreter.Interpret(command, _programMock.Object);
 
             var stepCommand = (StepCommand)executedCommand;
             Assert.AreEqual(x, stepCommand.X);
@@ -52,7 +52,7 @@ namespace Com.Gitlab.Aartjes.Minesweeper.Cli.Test
             _programMock.Setup(program => program.Game)
                 .Returns(gameMock.Object);
 
-            _interpreter.Interpret(command);
+            _interpreter.Interpret(command, _programMock.Object);
 
             var flagCommand = (FlagCommand)executedCommand;
             Assert.AreEqual(x, flagCommand.X);
@@ -69,7 +69,7 @@ namespace Com.Gitlab.Aartjes.Minesweeper.Cli.Test
             _programMock.Setup(program => program.Exit())
                 .Callback(() => amountOfTimesExitHasBeenCalled += 1);
 
-            _interpreter.Interpret(command);
+            _interpreter.Interpret(command, _programMock.Object);
 
             Assert.AreEqual(1, amountOfTimesExitHasBeenCalled);
         }
@@ -95,7 +95,7 @@ namespace Com.Gitlab.Aartjes.Minesweeper.Cli.Test
 
             var command = "step 1, 1";
 
-            _interpreter.Interpret(command);
+            _interpreter.Interpret(command, _programMock.Object);
 
             Assert.AreEqual(expectedLoseCalls, amountOfTimesLoseIsCalled);
             Assert.AreEqual(expectedWinCalls, amountOfTimesWinIsCalled);
