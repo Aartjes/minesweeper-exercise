@@ -24,7 +24,18 @@ namespace Com.Github.Aartjes.Minesweeper.Cli
 
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var program = new Program(
+                new Communicator(
+                    new TextResources(),
+                    new ConsoleWrapper()),
+                new GameFactory(
+                    new FieldProbe(),
+                    new SpaceStateConvertor()),
+                new GameStatePrinter(
+                    new SpaceStateToStringConvertor()),
+                new CommandInterpreter());
+
+            program.Execute();
         }
 
         public void Exit()
