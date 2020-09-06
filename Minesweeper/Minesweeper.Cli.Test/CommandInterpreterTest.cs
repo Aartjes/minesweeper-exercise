@@ -2,6 +2,7 @@
 using Com.Github.Aartjes.Minesweeper.Model;
 using Moq;
 using NUnit.Framework;
+using System.Collections;
 using System.Reflection.PortableExecutable;
 
 namespace Com.Gitlab.Aartjes.Minesweeper.Cli.Test
@@ -102,6 +103,21 @@ namespace Com.Gitlab.Aartjes.Minesweeper.Cli.Test
             Assert.AreEqual(expectedWinCalls, amountOfTimesWinIsCalled);
         }
 
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase("sglkhdfglksdhfg")]
+        [TestCase("This isn't an existing command.")]
+        public void Interpret_EmptyNullOrGibberishCommand_AskAgain(string command)
+        {
+            int amountOfTimesAsked = 0;
+            _programMock.Setup(program => program.AskForCommand())
+                .Callback(() => amountOfTimesAsked += 1);
+
+            _interpreter.Interpret(command, _programMock.Object);
+
+            Assert.AreEqual(1, amountOfTimesAsked);
+        }
+
         [TestCase("Yes", 1, 0)]
         [TestCase("No", 0, 1)]
         [TestCase("  YeS  ,", 1, 0)]
@@ -119,6 +135,19 @@ namespace Com.Gitlab.Aartjes.Minesweeper.Cli.Test
 
             Assert.AreEqual(expectedNewGameCallCounts, newGameCallCount);
             Assert.AreEqual(expectedExitCounts, exitCounts);
+        }
+
+        [TestCase(null)]
+        [TestCase("")]
+        public void InterpretNewGameYesNo_NullOrEmpty_AskAgain(string response)
+        {
+            int amountOfTimesAsked = 0;
+            _programMock.Setup(program => program.AskForNewGame())
+                .Callback(() => amountOfTimesAsked += 1);
+
+            _interpreter.InterpretNewGameYesNo(response, _programMock.Object);
+
+            Assert.AreEqual(1, amountOfTimesAsked);
         }
     }
 }

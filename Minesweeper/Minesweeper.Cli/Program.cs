@@ -57,7 +57,7 @@ namespace Com.Github.Aartjes.Minesweeper.Cli
         {
             CommunicateState();
             communicateGameEnd();
-            _interpreter.InterpretNewGameYesNo(_communicator.AskForNewGame(), this);
+            AskForNewGame();
         }
 
         public void Execute()
@@ -65,7 +65,7 @@ namespace Com.Github.Aartjes.Minesweeper.Cli
             while (!_exited)
             {
                 CommunicateState();
-                _interpreter.Interpret(_communicator.AskForCommand(), this);
+                AskForCommand();
             }
         }
 
@@ -77,6 +77,16 @@ namespace Com.Github.Aartjes.Minesweeper.Cli
         public void NewGame()
         {
             Game = _gameFactory.Create();
+        }
+
+        public void AskForNewGame()
+        {
+            _interpreter.InterpretNewGameYesNo(_communicator.AskForNewGame(), this);
+        }
+
+        public void AskForCommand()
+        {
+            _interpreter.Interpret(_communicator.AskForCommand(), this);
         }
     }
 }

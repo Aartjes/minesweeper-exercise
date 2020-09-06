@@ -181,5 +181,51 @@ namespace Com.Gitlab.Aartjes.Minesweeper.Cli.Test
             Assert.AreEqual(expectedStateDisplayCounter, stateDisplayCounter);
             Assert.AreEqual(expectedGameCreationCounter, gameCreationCounter);
         }
+
+        [TestCase("Yes")]
+        [TestCase("No")]
+        public void AskForNewGame_AsksCommunicatorAndPassesResponseToInterpreter(string response)
+        {
+            _communicatorMock.Setup(communicator => communicator.AskForNewGame())
+                .Returns(response);
+
+            var interpreterMock = new Mock<ICommandInterpreter>();
+            var program = new Program(
+                _communicatorMock.Object, 
+                _gameFactoryMock.Object, 
+                _gameStatePrinterMock.Object, 
+                interpreterMock.Object);
+
+            int interpretCallCount = 0;
+            interpreterMock.Setup(interpreter => interpreter.InterpretNewGameYesNo(It.Is<string>(command => command == response), It.Is<IProgram>(prog => prog == program)))
+                .Callback(() => interpretCallCount += 1);
+
+            program.AskForNewGame();
+
+            Assert.AreEqual(1, interpretCallCount);
+        }
+
+        [TestCase("Step 1,1")]
+        [TestCase("Flag 5,5")]
+        public void AskForCommand_AsksCommunicatorAndPassesResponseToInterpreter(string response)
+        {
+            _communicatorMock.Setup(communicator => communicator.AskForCommand())
+                .Returns(response);
+
+            var interpreterMock = new Mock<ICommandInterpreter>();
+            var program = new Program(
+                _communicatorMock.Object,
+                _gameFactoryMock.Object,
+                _gameStatePrinterMock.Object,
+                interpreterMock.Object);
+
+            int interpretCallCount = 0;
+            interpreterMock.Setup(interpreter => interpreter.Interpret(It.Is<string>(command => command == response), It.Is<IProgram>(prog => prog == program)))
+                .Callback(() => interpretCallCount += 1);
+
+            program.AskForCommand();
+
+            Assert.AreEqual(1, interpretCallCount);
+        }
     }
 }

@@ -15,23 +15,33 @@ namespace Com.Github.Aartjes.Minesweeper.Cli
         public void Interpret(string command, IProgram program)
         {
             var parts = ProcessCommand(command);
-            if (string.Equals("step", parts[0], StringComparison.CurrentCultureIgnoreCase))
+            if (parts.Length > 0)
             {
-                CreateAndExecuteGameCommand((x, y) => new StepCommand(x, y), parts[1], parts[2], program);
+                if (string.Equals("step", parts[0], StringComparison.CurrentCultureIgnoreCase))
+                {
+                    CreateAndExecuteGameCommand((x, y) => new StepCommand(x, y), parts[1], parts[2], program);
+                    return;
+                }
+                else if (string.Equals("flag", parts[0], StringComparison.CurrentCultureIgnoreCase))
+                {
+                    CreateAndExecuteGameCommand((x, y) => new FlagCommand(x, y), parts[1], parts[2], program);
+                    return;
+                }
+                else if (string.Equals("exit", parts[0], StringComparison.CurrentCultureIgnoreCase))
+                {
+                    program.Exit();
+                    return;
+                }
             }
-            else if (string.Equals("flag", parts[0], StringComparison.CurrentCultureIgnoreCase))
-            {
-                CreateAndExecuteGameCommand((x, y) => new FlagCommand(x, y), parts[1], parts[2], program);
-            }
-            else if (string.Equals("exit", parts[0], StringComparison.CurrentCultureIgnoreCase))
-            {
-                program.Exit();
-            }
+
+            //if not returned yet:
+            program.AskForCommand();
         }
 
         private string[] ProcessCommand(string command)
         {
-            return command.Split(" \t,".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            return command?.Split(" \t,".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
+                ?? new string[0];
         }
 
         private void CreateAndExecuteGameCommand(Func<int, int, IGameCommand> createCommand, string xString, string yString, IProgram program)
@@ -61,7 +71,12 @@ namespace Com.Github.Aartjes.Minesweeper.Cli
 
         public void InterpretNewGameYesNo(string command, IProgram program)
         {
-            if (string.Equals(ProcessCommand(command)[0], "Yes", StringComparison.OrdinalIgnoreCase))
+            var processedCommand = ProcessCommand(command);
+            if (processedCommand.Length < 1)
+            {
+                program.AskForNewGame();
+            }
+            else if (string.Equals(processedCommand[0], "Yes", StringComparison.OrdinalIgnoreCase))
             {
                 program.NewGame();
             }
