@@ -19,11 +19,11 @@ namespace Com.Github.Aartjes.Minesweeper.Model.Test
         }
 
         [Test]
-        public void GameFactory_StartsWith30x16With99Mines()
+        public void GameFactory_StartsWith9x9With10Mines()
         {
-            Assert.AreEqual(30, _gameFactory.FieldWidth);
-            Assert.AreEqual(16, _gameFactory.FieldHeight);
-            Assert.AreEqual(99, _gameFactory.MineCount);
+            Assert.AreEqual(9, _gameFactory.FieldWidth);
+            Assert.AreEqual(9, _gameFactory.FieldHeight);
+            Assert.AreEqual(10, _gameFactory.MineCount);
         }
 
         [TestCase(26, 24, 100)]

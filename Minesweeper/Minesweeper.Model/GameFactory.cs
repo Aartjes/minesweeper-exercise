@@ -21,9 +21,9 @@ namespace Com.Github.Aartjes.Minesweeper.Model
             _random = random;
         }
 
-        public int FieldWidth { get; set; } = 30;
-        public int FieldHeight { get; set; } = 16;
-        public int MineCount { get; set; } = 99;
+        public int FieldWidth { get; set; } = 9;
+        public int FieldHeight { get; set; } = 9;
+        public int MineCount { get; set; } = 10;
 
         public IGame Create()
         {
