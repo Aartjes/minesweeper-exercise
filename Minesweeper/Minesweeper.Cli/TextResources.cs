@@ -13,6 +13,6 @@ namespace Com.Github.Aartjes.Minesweeper.Cli
 
         public string LossMessage => Resources.LossMessage;
 
-        public string VictoryMessage => VictoryMessage;
+        public string VictoryMessage => Resources.Victory_message;
     }
 }
