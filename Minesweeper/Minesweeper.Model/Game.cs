@@ -14,6 +14,12 @@ namespace Com.Github.Aartjes.Minesweeper.Model
 
         public IGameState State { get; }
 
+        public int FieldWidth => State.FieldWidth;
+
+        public int FieldHeight => State.FieldHeight;
+
+        public int MineCount => State.MineCount;
+
         public GameStatus ExecuteCommand(IGameCommand command)
         {
             command.Execute(State);
